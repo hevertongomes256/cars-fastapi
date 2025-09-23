@@ -65,7 +65,7 @@ async def delete_veiculo(veiculo_id: int):
         veiculos.remove(veiculo_delete)
         return Response(status_code=status.HTTP_204_NO_CONTENT)
     else:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Não existe um curso com id {veiculo_id}')
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Veiculo com id {veiculo_id} não encontrado!')
 
 if __name__ == '__main__':
     import uvicorn
