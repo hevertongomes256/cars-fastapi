@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi import status
 
-from models import Veiculo, veiculos
+from models.veiculo import Veiculo, veiculos
 
 
 app = FastAPI(
