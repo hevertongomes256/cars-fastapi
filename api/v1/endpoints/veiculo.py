@@ -24,7 +24,7 @@ async def post_veiculo(veiculo: VeiculoSchema, db: AsyncSession = Depends(get_se
         modelo=veiculo.modelo,
         ano=veiculo.ano,
         placa=veiculo.placa,
-        marca=veiculo.marcar,
+        marca=veiculo.marca,
         tipo=veiculo.tipo,
         descricao=veiculo.descricao,
         preco_fip=veiculo.preco_fip,
@@ -63,33 +63,33 @@ async def get_veiculo(veiculo_id: int, db: AsyncSession = Depends(get_session)):
 
 # PUT veiculo
 @router.put('/{veiculo_id}', response_model=VeiculoSchema, status_code=status.HTTP_202_ACCEPTED)
-async def put_veiculo(veiculo_id: int, curso: VeiculoSchema, db: AsyncSession = Depends(get_session)):
+async def put_veiculo(veiculo_id: int, veiculo: VeiculoSchema, db: AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(Veiculo).filter(Veiculo.id == veiculo_id)
         result = await session.execute(query)
         veiculo_up = result.scalar_one_or_none()
 
         if veiculo_up:
-            veiculo_up.modelo = curso.modelo
-            veiculo_up.ano = curso.ano
-            veiculo_up.placa = curso.placa
-            veiculo_up.marca = curso.marca
-            veiculo_up.tipo = curso.tipo
-            veiculo_up.descricao = curso.descricao
-            veiculo_up.preco_fip = curso.preco_fip
-            veiculo_up.preco_loja = curso.preco_loja
+            veiculo_up.modelo = veiculo.modelo
+            veiculo_up.ano = veiculo.ano
+            veiculo_up.placa = veiculo.placa
+            veiculo_up.marca = veiculo.marca
+            veiculo_up.tipo = veiculo.tipo
+            veiculo_up.descricao = veiculo.descricao
+            veiculo_up.preco_fip = veiculo.preco_fip
+            veiculo_up.preco_loja = veiculo.preco_loja
 
             await session.commit()
 
             return veiculo_up
         else:
-            raise HTTPException(detail='Curso não encontrado.',
+            raise HTTPException(detail='Veículo não encontrado.',
                                 status_code=status.HTTP_404_NOT_FOUND)
 
 
 # DELETE veiculo
 @router.delete('/{veiculo_id}', status_code=status.HTTP_204_NO_CONTENT)
-async def delete_curso(veiculo_id: int, db: AsyncSession = Depends(get_session)):
+async def delete_veiculo(veiculo_id: int, db: AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(Veiculo).filter(Veiculo.id == veiculo_id)
         result = await session.execute(query)
@@ -101,5 +101,5 @@ async def delete_curso(veiculo_id: int, db: AsyncSession = Depends(get_session))
 
             return Response(status_code=status.HTTP_204_NO_CONTENT)
         else:
-            raise HTTPException(detail='Curso não encontrado.',
+            raise HTTPException(detail='Veículo não encontrado.',
                                 status_code=status.HTTP_404_NOT_FOUND)
