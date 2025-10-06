@@ -10,6 +10,8 @@ psycopg2-binary==2.9.3
 pydantic==1.9.0
 sniffio==1.2.0
 SQLAlchemy==1.4.36
+sqlalchemy2-stubs==0.0.2a22
+sqlmodel==0.0.6
 starlette==0.17.1
 typing_extensions==4.2.0
 uvicorn==0.17.6

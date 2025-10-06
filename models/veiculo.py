@@ -1,17 +1,25 @@
-from core.configs import settings
+from typing import Optional
 
-from sqlalchemy import Column, Integer, String, Float
+from sqlmodel import Field, SQLModel
+
+from pydantic import validator
 
 
-class Veiculo(settings.DBBaseModel):
-    __tablename__ = 'veiculos'
+class Veiculo(SQLModel, table=True):
+    __tablename__: str = 'veiculos'
 
-    id: int = Column(Integer, primary_key=True, autoincrement=True)
-    modelo: str = Column(String(100))
-    ano: int = Column(Integer)
-    placa: str = Column(String(10))
-    marca: str = Column(String(100))
-    tipo: str = Column(String(100))
-    descricao: str = Column(String(255))
-    preco_fip: float = Column(Float)
-    preco_loja: float = Column(Float)
+    id: Optional[int] = Field(default=None, primary_key=True)
+    modelo: str
+    ano: int
+    placa: str
+    marca: str
+    tipo: str
+    descricao: str
+    preco_fip: float
+    preco_loja: float
+
+    @validator('placa')
+    def validar_placa(cls, value: str):
+        if len(value) < 8:
+            raise ValueError('A placa deve ter 8 digítos.')
+        return value

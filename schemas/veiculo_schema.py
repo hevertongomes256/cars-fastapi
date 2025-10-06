@@ -2,6 +2,8 @@ from typing import Optional
 
 from pydantic import BaseModel, validator
 
+# Schema separado
+
 
 class VeiculoSchema(BaseModel):
     id: Optional[int] = None

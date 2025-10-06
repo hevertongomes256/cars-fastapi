@@ -9,8 +9,7 @@ from fastapi import Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from models.veiculo import Veiculo
-from schemas.veiculo_schema import VeiculoSchema
+from models.veiculo import Veiculo as VeiculoModel
 from core.deps import get_session
 
 
@@ -18,9 +17,9 @@ router = APIRouter()
 
 
 # POST veiculo
-@router.post('/', status_code=status.HTTP_201_CREATED, response_model=VeiculoSchema)
-async def post_veiculo(veiculo: VeiculoSchema, db: AsyncSession = Depends(get_session)):
-    novo_veiculo = Veiculo(
+@router.post('/', status_code=status.HTTP_201_CREATED, response_model=VeiculoModel)
+async def post_veiculo(veiculo: VeiculoModel, db: AsyncSession = Depends(get_session)):
+    novo_veiculo = VeiculoModel(
         modelo=veiculo.modelo,
         ano=veiculo.ano,
         placa=veiculo.placa,
@@ -38,20 +37,20 @@ async def post_veiculo(veiculo: VeiculoSchema, db: AsyncSession = Depends(get_se
 
 
 # GET veiculos
-@router.get('/', response_model=List[VeiculoSchema])
+@router.get('/', response_model=List[VeiculoModel])
 async def get_veiculos(db: AsyncSession = Depends(get_session)):
     async with db as session:
-        query = select(Veiculo)
+        query = select(VeiculoModel)
         result = await session.execute(query)
-        veiculos: List[VeiculoSchema] = result.scalars().all()
+        veiculos: List[VeiculoModel] = result.scalars().all()
         return veiculos
 
 
 # GET veiculo
-@router.get('/{veiculo_id}', response_model=VeiculoSchema, status_code=status.HTTP_200_OK)
+@router.get('/{veiculo_id}', response_model=VeiculoModel, status_code=status.HTTP_200_OK)
 async def get_veiculo(veiculo_id: int, db: AsyncSession = Depends(get_session)):
     async with db as session:
-        query = select(Veiculo).filter(Veiculo.id == veiculo_id)
+        query = select(VeiculoModel).filter(VeiculoModel.id == veiculo_id)
         result = await session.execute(query)
         veiculo = result.scalar_one_or_none()
 
@@ -62,10 +61,10 @@ async def get_veiculo(veiculo_id: int, db: AsyncSession = Depends(get_session)):
 
 
 # PUT veiculo
-@router.put('/{veiculo_id}', response_model=VeiculoSchema, status_code=status.HTTP_202_ACCEPTED)
-async def put_veiculo(veiculo_id: int, veiculo: VeiculoSchema, db: AsyncSession = Depends(get_session)):
+@router.put('/{veiculo_id}', response_model=VeiculoModel, status_code=status.HTTP_202_ACCEPTED)
+async def put_veiculo(veiculo_id: int, veiculo: VeiculoModel, db: AsyncSession = Depends(get_session)):
     async with db as session:
-        query = select(Veiculo).filter(Veiculo.id == veiculo_id)
+        query = select(VeiculoModel).filter(VeiculoModel.id == veiculo_id)
         result = await session.execute(query)
         veiculo_up = result.scalar_one_or_none()
 
@@ -91,7 +90,7 @@ async def put_veiculo(veiculo_id: int, veiculo: VeiculoSchema, db: AsyncSession 
 @router.delete('/{veiculo_id}', status_code=status.HTTP_204_NO_CONTENT)
 async def delete_veiculo(veiculo_id: int, db: AsyncSession = Depends(get_session)):
     async with db as session:
-        query = select(Veiculo).filter(Veiculo.id == veiculo_id)
+        query = select(VeiculoModel).filter(VeiculoModel.id == veiculo_id)
         result = await session.execute(query)
         veiculo_del = result.scalar_one_or_none()
 
