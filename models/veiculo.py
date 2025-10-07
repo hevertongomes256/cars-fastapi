@@ -18,6 +18,18 @@ class Veiculo(SQLModel, table=True):
     preco_fip: float
     preco_loja: float
 
+
+class CriarAtualizarVeiculo(SQLModel):
+
+    modelo: str
+    ano: int
+    placa: str
+    marca: str
+    tipo: str
+    descricao: str
+    preco_fip: float
+    preco_loja: float
+
     @validator('placa')
     def validar_placa(cls, value: str):
         if len(value) < 8:
